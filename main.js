@@ -20,11 +20,15 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 
 // Add a cube
-const geometry = new THREE.BoxGeometry();
+const geometry = new THREE.BoxGeometry(1, 1, 1, 30, 30, 30);
 const material = new THREE.ShaderMaterial({
-  vertexShader: vertex,
-  fragmentShader: fragment,
+uniforms: {
+    uTime: {value: 0},
+},
+vertexShader: vertex,
+fragmentShader: fragment,
 });
+console.log(material);
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
@@ -36,9 +40,10 @@ function animate() {
   requestAnimationFrame(animate);
 
   // Rotate the cube for some animation
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
+//   cube.rotation.x += 0.01;
+//   cube.rotation.y += 0.01;
 
+  material.uniforms.uTime.value += 0.1;
   renderer.render(scene, camera);
 }
 animate();

@@ -1,5 +1,7 @@
-// Basic Three.js fragment shader
+// Basic Three.js fragment shader: plain color output
+
+uniform vec3 color;
 
 void main() {
-    gl_FragColor = vec4(1.0, 2, 0.2, 1.0); // Orange-ish color
+    gl_FragColor = vec4(color, 1.0);
 }

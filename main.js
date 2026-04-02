@@ -1,56 +1,63 @@
-import * as THREE from "three";
-import vertex from "./shaders/vertex.glsl?raw";
-import fragment from "./shaders/fragment.glsl?raw";
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import vertex from './shaders/vertex.glsl';
+import fragment from './shaders/fragment.glsl';
+// Basic Three.js scene with OrbitControls and responsive resize
 
-// Create scene
+// Assuming three.js and OrbitControls are available via ES modules or have been included via <script> tags
+
+// Scene, camera, renderer
 const scene = new THREE.Scene();
 
-// Create camera
 const camera = new THREE.PerspectiveCamera(
-  75,
+  75, 
   window.innerWidth / window.innerHeight,
   0.1,
-  1000,
+  1000
 );
+camera.position.set(0, 0, 5);
 
-// Create renderer
-const canvas = document.querySelector("#canvas");
-const renderer = new THREE.WebGLRenderer({ canvas });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
+// Create or get an existing <canvas> element
+let canvas = document.createElement('canvas');
+canvas.id = 'threejs-canvas';
+document.body.appendChild(canvas);
 
-// Add a cube
-const geometry = new THREE.BoxGeometry(1, 1, 1, 30, 30, 30);
-const material = new THREE.ShaderMaterial({
-uniforms: {
-    uTime: {value: 0},
-},
-vertexShader: vertex,
-fragmentShader: fragment,
+const renderer = new THREE.WebGLRenderer({ 
+  canvas: canvas 
 });
-console.log(material);
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+// Orbit Controls
+const controls = new OrbitControls(camera, renderer.domElement);
+
+// Add a simple geometry (cube) with wireframe
+const geometry = new THREE.PlaneGeometry(2, 3, 10 ,10);
+const material = new THREE.ShaderMaterial({
+  vertexShader: vertex,
+  fragmentShader: fragment,
+  side: THREE.DoubleSide,
+  uniforms: {
+    color: { value: new THREE.Color(0xff0000) },
+    uTime: { value: 0 },
+  },
+});
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
-// Position camera
-camera.position.z = 5;
 
-// Animation loop
-function animate() {
-  requestAnimationFrame(animate);
-
-  // Rotate the cube for some animation
-//   cube.rotation.x += 0.01;
-//   cube.rotation.y += 0.01;
-
-  material.uniforms.uTime.value += 0.1;
-  renderer.render(scene, camera);
-}
-animate();
-
-// Resize renderer with window
-window.addEventListener("resize", () => {
+// Responsive resizing
+window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+// Animation loop
+function animate() {
+  requestAnimationFrame(animate);
+  
+  material.uniforms.uTime.value += 0.1;
+  renderer.render(scene, camera);
+  controls.update();
+}
+animate();

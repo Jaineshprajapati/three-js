@@ -39,8 +39,6 @@ function animate() {
   requestAnimationFrame(animate);
 
   material.uniforms.uTime.value += 0.1;
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
   renderer.render(scene, camera);
 }
 animate();

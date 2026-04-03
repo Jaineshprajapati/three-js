@@ -3,15 +3,17 @@ varying vec2 vUv;
 uniform float uTime;
 
 void main() {
-    // Blend a vibrant blue and a warm orange
-    vec4 colorA = vec4(0.1, 0.6, 1.0, 1.0);    // blue
-    vec4 colorB = vec4(1.0, 0.6, 0.1, 1.0);    // orange
-    vec4 colorC = vec4(1.0, 0.0, 0.0, 1.0);    // red   
-    vec4 colorD = vec4(0.0, 1.0, 0.0, 1.0);    // green
+    vec4 c1 = vec4(0.0, 0.39, 0.0, 1.0); // dark green (bottom)
+    vec4 c2 = vec4(1.0, 1.0, 1.0, 1.0);  // white (middle)
+    vec4 c3 = vec4(1.0, 0.5, 0.0, 1.0);  // orange (top)
 
-    vec4 color1 = mix(colorA, colorB, vUv.x + sin(uTime * .2));
-    vec4 color2 = mix(colorC, colorD, vUv.x + sin(uTime * .2));
+    // Use step at two thresholds: 0.3 and 0.6
+    float s1 = step(0.3, vUv.y); // 0 if <0.3, 1 if >=0.3
+    float s2 = step(0.6, vUv.y); // 0 if <0.6, 1 if >=0.6
 
-    vec4 final = mix(color1, color2, vUv.y + cos(uTime * .2));
+    vec4 final = c1;
+    final = mix(final, c2, s1);
+    final = mix(final, c3, s2);
+
     gl_FragColor = final;
 }

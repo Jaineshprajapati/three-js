@@ -3,17 +3,12 @@ varying vec2 vUv;
 uniform float uTime;
 
 void main() {
-    vec4 c1 = vec4(0.0, 0.39, 0.0, 1.0); // dark green (bottom)
-    vec4 c2 = vec4(1.0, 1.0, 1.0, 1.0);  // white (middle)
-    vec4 c3 = vec4(1.0, 0.5, 0.0, 1.0);  // orange (top)
+    
+    // float green = smoothstep(0.2, 0.8, vUv.y) * 0.39;
+    // vec4 color = vec4(0.0, green, 0.0, 1.0);
 
-    // Use step at two thresholds: 0.3 and 0.6
-    float s1 = step(0.3, vUv.y); // 0 if <0.3, 1 if >=0.3
-    float s2 = step(0.6, vUv.y); // 0 if <0.6, 1 if >=0.6
+   float val = clamp(-1., 1., (vUv.y*2.)-1.);
+   vec4 color = vec4(val, val, val, 1.0);
 
-    vec4 final = c1;
-    final = mix(final, c2, s1);
-    final = mix(final, c3, s2);
-
-    gl_FragColor = final;
+    gl_FragColor = color;
 }

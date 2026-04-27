@@ -24,14 +24,16 @@ renderer.setPixelRatio(window.devicePixelRatio);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 
-// Add a cube
+// Add a plane with shader material
 const geometry = new THREE.PlaneGeometry(2, 2, 200, 200);
 const material = new THREE.ShaderMaterial({
   vertexShader: vertex,
   fragmentShader: fragment,
+  side: THREE.DoubleSide,
   uniforms: {
-    uTime: { value: 0 },
-  },
+    uTime: { value: 0.0 },
+    uTexture: { value: new THREE.Textureloader().load("./test.jpg")}
+  }
 });
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
@@ -42,8 +44,6 @@ camera.position.z = 3;
 // Animation loop
 function animate() {
   requestAnimationFrame(animate);
-
-  material.uniforms.uTime.value += 0.05;
   controls.update();
   renderer.render(scene, camera);
 }

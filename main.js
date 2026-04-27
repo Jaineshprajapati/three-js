@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import vertex from "./shaders/vertex.glsl?raw";
 import fragment from "./shaders/fragment.glsl?raw";
 
@@ -19,8 +20,12 @@ const renderer = new THREE.WebGLRenderer({ canvas });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 
+// Add Orbit Controls
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
 // Add a cube
-const geometry = new THREE.BoxGeometry();
+const geometry = new THREE.PlaneGeometry(2, 2, 200, 200);
 const material = new THREE.ShaderMaterial({
   vertexShader: vertex,
   fragmentShader: fragment,
@@ -38,7 +43,8 @@ camera.position.z = 3;
 function animate() {
   requestAnimationFrame(animate);
 
-  material.uniforms.uTime.value += 0.1;
+  material.uniforms.uTime.value += 0.05;
+  controls.update();
   renderer.render(scene, camera);
 }
 animate();

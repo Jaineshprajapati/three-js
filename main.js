@@ -27,10 +27,12 @@ controls.enableDamping = true;
 // Add a cube
 const geometry = new THREE.PlaneGeometry(2, 2, 200, 200);
 const material = new THREE.ShaderMaterial({
+  side: THREE.DoubleSide,
   vertexShader: vertex,
   fragmentShader: fragment,
   uniforms: {
     uTime: { value: 0 },
+    uTexture: { value: new THREE.TextureLoader().load("./images.jpeg")}
   },
 });
 const cube = new THREE.Mesh(geometry, material);
